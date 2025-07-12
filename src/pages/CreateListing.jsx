@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import LocationPicker from "../components/LocationPicker";
 export default function CreateListing() {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ export default function CreateListing() {
     animal: false,
     address: "",
     description: "",
+    latitude: 0,
+    longitude: 0,
     images: {},
   });
   const {
@@ -62,6 +65,16 @@ export default function CreateListing() {
       }));
     }
   }
+
+  function handleLocationSelect(location) {
+    setFormData((prevState) => ({
+      ...prevState,
+      address: location.address,
+      latitude: location.latitude,
+      longitude: location.longitude,
+    }));
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -116,8 +129,6 @@ export default function CreateListing() {
       userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
-    delete formDataCopy.latitude;
-    delete formDataCopy.longitude;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false);
     toast.success("Listing created");
@@ -319,15 +330,7 @@ export default function CreateListing() {
               >
                 Address
               </label>
-              <textarea
-                id="address"
-                value={address}
-                onChange={onChange}
-                placeholder="Pickup address"
-                required
-                className="w-full px-4 py-2 text-dark-olive bg-white border border-golden-yellow rounded-2xl"
-                rows="4"
-              ></textarea>
+              <LocationPicker onLocationSelect={handleLocationSelect} />
             </div>
             <div>
               <label
@@ -361,4 +364,3 @@ export default function CreateListing() {
     </main>
   );
 }
-         

@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import LocationPicker from "../components/LocationPicker";
 export default function CreateListing() {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -95,6 +96,16 @@ export default function CreateListing() {
       }));
     }
   }
+
+  function handleLocationSelect(location) {
+    setFormData((prevState) => ({
+      ...prevState,
+      address: location.address,
+      latitude: location.latitude,
+      longitude: location.longitude,
+    }));
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -146,8 +157,6 @@ export default function CreateListing() {
       userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
-    delete formDataCopy.latitude;
-    delete formDataCopy.longitude;
     const docRef = doc(db, "listings", params.listingId);
     await updateDoc(docRef, formDataCopy);
     setLoading(false);
@@ -288,43 +297,10 @@ export default function CreateListing() {
             </button>
           </div>
           <p className="text-lg mt-6 font-semibold text-dark-olive">Address</p>
-          <textarea
-            type="text"
-            id="address"
-            value={address}
-            onChange={onChange}
-            placeholder="Address"
-            required
-            className="w-full px-4 py-2 text-dark-olive bg-white border border-golden-yellow rounded-2xl mb-6"
+          <LocationPicker
+            onLocationSelect={handleLocationSelect}
+            initialData={{ address, latitude, longitude }}
           />
-          <div className="flex space-x-6 justify-start mb-6">
-            <div className="">
-              <p className="text-lg font-semibold text-dark-olive">Latitude</p>
-              <input
-                type="number"
-                id="latitude"
-                value={latitude}
-                onChange={onChange}
-                required
-                min="-90"
-                max="90"
-                className="w-full px-4 py-2 text-xl text-dark-olive bg-white border border-golden-yellow rounded-2xl text-center"
-              />
-            </div>
-            <div className="">
-              <p className="text-lg font-semibold text-dark-olive">Longitude</p>
-              <input
-                type="number"
-                id="longitude"
-                value={longitude}
-                onChange={onChange}
-                required
-                min="-180"
-                max="180"
-                className="w-full px-4 py-2 text-xl text-dark-olive bg-white border border-golden-yellow rounded-2xl text-center"
-              />
-            </div>
-          </div>
           <p className="text-lg font-semibold text-dark-olive">Description</p>
           <textarea
             type="text"
@@ -361,4 +337,4 @@ export default function CreateListing() {
     </>
   );
 }
-          
+           
