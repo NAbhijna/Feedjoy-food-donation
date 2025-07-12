@@ -26,6 +26,7 @@ export default function CreateListing() {
     expiry: "",
     condition: false,
     animal: false,
+    dietary: "veg",
     address: "",
     description: "",
     latitude: 0,
@@ -39,10 +40,12 @@ export default function CreateListing() {
     expiry,
     condition,
     animal,
+    dietary,
     address,
     description,
     images,
   } = formData;
+  const today = new Date().toISOString().split("T")[0];
   function onChange(e) {
     let boolean = null;
     if (e.target.value === "true") {
@@ -122,6 +125,11 @@ export default function CreateListing() {
       toast.error("Images not uploaded");
       return;
     });
+
+    if (imgUrls === undefined) {
+      return;
+    }
+    
     const formDataCopy = {
       ...formData,
       imgUrls,
@@ -140,7 +148,7 @@ export default function CreateListing() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto p-4">
+    <main className="w-full p-4">
       <h1 className="text-3xl text-center my-6 font-bold text-dark-olive">
         Create a Listing
       </h1>
@@ -246,14 +254,46 @@ export default function CreateListing() {
                   Use By
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   id="expiry"
                   value={expiry}
                   onChange={onChange}
                   required
-                  placeholder="e.g., 3 days"
+                  min={today}
                   className="w-full px-4 py-2 text-dark-olive bg-white border border-golden-yellow rounded-2xl text-center"
                 />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-lg font-semibold mb-1">Dietary</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  id="dietary"
+                  value="veg"
+                  onClick={onChange}
+                  className={`px-7 py-3 w-full border rounded-2xl ${
+                    dietary !== "non-veg"
+                      ? "bg-olive-green text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  Veg
+                </button>
+                <button
+                  type="button"
+                  id="dietary"
+                  value="non-veg"
+                  onClick={onChange}
+                  className={`px-7 py-3 w-full border rounded-2xl ${
+                    dietary === "non-veg"
+                      ? "bg-olive-green text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  Non-Veg
+                </button>
               </div>
             </div>
 

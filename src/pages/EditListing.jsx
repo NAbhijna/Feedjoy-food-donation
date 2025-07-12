@@ -28,6 +28,7 @@ export default function CreateListing() {
     expiry: 1,
     condition: false,
     animal: false,
+    dietary: "veg",
     address: "",
     description: "",
     latitude: 0,
@@ -41,6 +42,7 @@ export default function CreateListing() {
     expiry,
     condition,
     animal,
+    dietary,
     address,
     description,
     latitude,
@@ -49,6 +51,7 @@ export default function CreateListing() {
   } = formData;
 
   const params = useParams();
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (listing && listing.userRef !== auth.currentUser.uid) {
@@ -150,6 +153,11 @@ export default function CreateListing() {
       toast.error("Images not uploaded");
       return;
     });
+
+    if (imgUrls === undefined) {
+      return;
+    }
+
     const formDataCopy = {
       ...formData,
       imgUrls,
@@ -170,7 +178,7 @@ export default function CreateListing() {
 
   return (
     <>
-      <main className="max-w-md px-4 mx-auto">
+      <main className="w-full px-4">
         <h1 className="text-3xl text-center mt-6 font-bold text-dark-olive">
           Edit Listing
         </h1>
@@ -235,14 +243,44 @@ export default function CreateListing() {
             <div>
               <p className="text-lg font-semibold text-dark-olive">Expiry</p>
               <input
-                type="text"
+                type="date"
                 id="expiry"
                 value={expiry}
                 onChange={onChange}
                 required
+                min={today}
                 className="w-full px-4 py-2 text-dark-olive bg-white border border-golden-yellow rounded-2xl text-center"
               />
             </div>
+          </div>
+          <p className="text-lg mt-6 font-semibold text-dark-olive">Dietary</p>
+          <div className="flex">
+            <button
+              type="button"
+              id="dietary"
+              value="veg"
+              onClick={onChange}
+              className={`mr-3 px-7 py-3 w-full border rounded-2xl ${
+                dietary !== "non-veg"
+                  ? "bg-olive-green text-white"
+                  : "bg-white text-black"
+              }`}
+            >
+              Veg
+            </button>
+            <button
+              type="button"
+              id="dietary"
+              value="non-veg"
+              onClick={onChange}
+              className={`mr-3 px-7 py-3 w-full border rounded-2xl ${
+                dietary === "non-veg"
+                  ? "bg-olive-green text-white"
+                  : "bg-white text-black"
+              }`}
+            >
+              Non-Veg
+            </button>
           </div>
           <p className="text-lg mt-6 font-semibold text-dark-olive">Condition</p>
           <div className="flex">
@@ -337,4 +375,3 @@ export default function CreateListing() {
     </>
   );
 }
-           

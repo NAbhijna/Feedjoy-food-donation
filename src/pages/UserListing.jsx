@@ -51,13 +51,13 @@ const UserListing = () => {
 
   return (
     <div>
-      <div className="max-w-6xl px-3 mt-6 mx-auto">
+      <div className="w-full px-3 mt-6">
         {!loading && listings.length > 0 && (
           <>
             <h2 className="font-bold text-2xl text-center p-4 mb-6 text-dark-olive">
               My Listings
             </h2>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            <ul className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {listings.map((listing) => (
                 <ListingItem
                   key={listing.id}

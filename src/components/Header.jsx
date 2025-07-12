@@ -27,7 +27,7 @@ export default function Header() {
   }
   return (
     <div className="bg-cream border-b border-golden-yellow shadow-sm sticky top-0 z-40">
-      <header className="flex justify-between items-center px-3 max-w-6xl mx-auto">
+      <header className="flex justify-between items-center px-4 py-2">
         <div>
           <button onClick={() => navigate("/")}>
             <h1 className="text-dark-olive font-bold text-2xl">FEEDJOY</h1>

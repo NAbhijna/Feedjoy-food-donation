@@ -27,7 +27,7 @@ export default function Explore() {
 			<h2 className="text-center text-3xl font-bold mb-8 text-dark-olive">
 				How You Can Help
 			</h2>
-			<div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center px-4">
+			<div className="w-full mx-auto grid md:grid-cols-3 gap-8 text-center px-4">
 				{helpTopics.map((topic, index) => (
 					<div
 						key={index}
