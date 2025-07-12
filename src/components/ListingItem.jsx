@@ -7,51 +7,57 @@ import { MdEdit } from "react-icons/md";
 
 export default function ListingItem({ listing, id, onEdit, onDelete }) {
   return (
-    <li className=" border border-black relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px] ">
-      <Link className="contents" to={`/category/${listing.type}/${id}`}>
-        <img
-          className="h-[170px] w-full object-cover hover:scale-105 transition-scale duration-200 ease-in"
-          loading="lazy"
-          src={listing.imgUrls[0]}
-          alt=""
-        />
-        <Moment
-          className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg"
-          fromNow
-        >
-          {listing.timestamp?.toDate()}
-        </Moment>
-        <div className="w-full p-[10px]">
+    <li className="relative bg-cream flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-2xl overflow-hidden transition-shadow duration-150 group">
+      <Link className="w-full" to={`/category/${listing.type}/${id}`}>
+        <div className="relative w-full">
+          <img
+            className="h-40 w-full object-cover group-hover:scale-105 transition-transform duration-200 ease-in"
+            loading="lazy"
+            src={listing.imgUrls[0]}
+            alt={listing.name}
+          />
+          <Moment
+            className="absolute top-2 left-2 bg-burnt-orange text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg"
+            fromNow
+          >
+            {listing.timestamp?.toDate()}
+          </Moment>
+        </div>
+        <div className="w-full p-4 space-y-2">
+          <p className="font-semibold text-lg text-dark-olive truncate">
+            {listing.name}
+          </p>
           <div className="flex items-center space-x-1">
-            <MdLocationPin className="h-4 w-4 text-green-600" />
-            <p className="font-semibold text-sm mb-[2px] text-gray-600 truncate">
+            <MdLocationPin className="h-4 w-4 text-olive-green" />
+            <p className="font-semibold text-sm text-dark-olive/80 truncate">
               {listing.address}
             </p>
           </div>
-          <p className="font-semibold m-0 text-xl truncate">{listing.name}</p>
-          <div className="flex items-center mt-[10px] space-x-3">
-            <div className="flex items-center space-x-1">
-              <p className="font-bold text-xs">
-                {listing.quantity > 1 ? `${listing.quantity} kgs` : "1 kg"}
-              </p>
-            </div>
-            <div className="flex items-center space-x-1">
-              <p className="font-bold text-xs">Use by {listing.expiry}</p>
-            </div>
+          <div className="flex items-center justify-between text-dark-olive">
+            <p className="font-bold text-sm">
+              {listing.quantity > 1 ? `${listing.quantity} kgs` : "1 kg"}
+            </p>
+            <p className="font-bold text-sm bg-golden-yellow text-dark-olive px-2 py-1 rounded-md">
+              Use by: {listing.expiry}
+            </p>
           </div>
         </div>
       </Link>
-      {onDelete && (
-        <FaTrash
-          className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500"
-          onClick={() => onDelete(listing.id)}
-        />
-      )}
-      {onEdit && (
-        <MdEdit
-          className="absolute bottom-2 right-7 h-4 cursor-pointer "
-          onClick={() => onEdit(listing.id)}
-        />
+      {(onDelete || onEdit) && (
+        <div className="absolute top-2 right-2 flex items-center gap-2">
+          {onEdit && (
+            <MdEdit
+              className="h-5 w-5 cursor-pointer text-dark-olive hover:text-burnt-orange"
+              onClick={() => onEdit(id)}
+            />
+          )}
+          {onDelete && (
+            <FaTrash
+              className="h-4 w-4 cursor-pointer text-red-600 hover:text-red-800"
+              onClick={() => onDelete(id)}
+            />
+          )}
+        </div>
       )}
     </li>
   );

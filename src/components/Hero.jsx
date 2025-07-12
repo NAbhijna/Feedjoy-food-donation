@@ -1,40 +1,39 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { slideIn } from "../utils/motion";
 
 const Hero = () => {
   return (
-    <div>
-      <section className="bg-gray-900 text-white">
-        <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
-          <div className="mx-auto max-w-3xl text-center">
-            <motion.h1
-              variants={slideIn("right", "tween", 0.2, 1)}
-              className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl"
+    <div
+      className="bg-cover bg-center"
+      style={{ backgroundImage: "url('/hero-image.jpg')" }}
+    >
+      <section className="bg-black bg-opacity-50">
+        <div className="mx-auto max-w-screen-xl px-4 py-32 flex flex-col items-center text-center">
+          <h1 className="text-4xl font-extrabold sm:text-6xl text-white">
+            Welcome to FeedJoy
+            <strong className="block font-extrabold text-golden-yellow">
+              Reduce Waste, End Hunger.
+            </strong>
+          </h1>
+
+          <p className="mt-4 sm:text-xl/relaxed max-w-xl text-white">
+            Your food donation can help feed families in need. Join our mission
+            to support our cause and be a part of the change.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <a
+              className="block w-full rounded-2xl bg-olive-green px-12 py-3 text-sm font-medium text-white shadow hover:bg-dark-olive focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
+              href="/profile"
             >
-              Enhance User Experience.
-              <span className="sm:block"> Drive Impactful Donations. </span>
-            </motion.h1>
+              Donate
+            </a>
 
-            <p className="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
-            Connect with us to make a difference through food donations. Learn more about our mission and how you can contribute to feeding those in need
-            </p>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <a
-                className="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
-                href="/profile"
-              >
-                Donate
-              </a>
-
-              <a
-                className="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
-                href="/"
-              >
-                Learn More
-              </a>
-            </div>
+            <a
+              className="block w-full rounded-2xl px-12 py-3 text-sm font-medium text-golden-yellow shadow hover:text-white focus:outline-none focus:ring active:text-blue-500 sm:w-auto"
+              href="#explore"
+            >
+              Learn More
+            </a>
           </div>
         </div>
       </section>

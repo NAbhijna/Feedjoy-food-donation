@@ -1,42 +1,51 @@
-import React, { useState } from "react";
-import { staggerContainer } from "../utils/motion";
-import { motion } from "framer-motion";
-import TypingText from "./styles/TypingText";
-import ExploreCard from "./styles/ExploreCard";
-import { exploreWorlds } from "./constants";
+import React from "react";
 
-const Explore = () => {
-  const [active, setActive] = useState("world-3");
-  return (
-    <>
-    <section className="sm:p-16 xs:p-8 px-6 py-4 top-0 " id="explore">
-   
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: false, amount: 0.25 }}
-        className="2xl:max-w-[1280px] w-full  flex flex-col"
-      >
-        <TypingText  title="| Types Of Donations" textStyles="text-center  " />
-      
-        <div className="mt-[2px] flex lg:flex-row flex-col min-h-[70vh] gap-5">
-          {exploreWorlds.map((world, index) => (
-            <ExploreCard
-              key={world.id}
-              {...world}
-              index={index}
-              active={active}
-              handleClick={setActive}
-            />
-          ))}
-        </div>
-      </motion.div>
-     
-    </section>
-    <svg className="down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#111827" fill-opacity="1" d="M0,288L1440,256L1440,320L0,320Z"></path></svg>
-    </>
-  );
-};
+const helpTopics = [
+	{
+		title: "Donate Food",
+		description:
+			"Have surplus food? List your donation and connect with someone who needs it.",
+		imgUrl: "/D (1).jpeg",
+	},
+	{
+		title: "Help Our Furry Friends",
+		description:
+			"We welcome pet food donations to support local animal shelters and pet owners in need.",
+		imgUrl: "/D (2).jpeg",
+	},
+	{
+		title: "Receive Support",
+		description:
+			"Find fresh and nutritious meals from donations made by people in your community.",
+		imgUrl: "D (3).jpeg",
+	},
+];
 
-export default Explore;
+export default function Explore() {
+	return (
+		<div className="py-16 bg-cream" id="explore">
+			<h2 className="text-center text-3xl font-bold mb-8 text-dark-olive">
+				How You Can Help
+			</h2>
+			<div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center px-4">
+				{helpTopics.map((topic, index) => (
+					<div
+						key={index}
+						className="p-6 border border-golden-yellow rounded-2xl shadow-lg bg-cream transform hover:scale-105 transition-transform duration-300"
+					>
+						<img
+							src={topic.imgUrl}
+							alt={topic.title}
+							className="w-full h-48 object-cover rounded-2xl mb-4"
+						/>
+						<h3 className="text-xl font-semibold mb-2 text-dark-olive">
+							{topic.title}
+						</h3>
+						<p className="text-dark-olive">{topic.description}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+

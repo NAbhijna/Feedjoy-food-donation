@@ -22,6 +22,7 @@ export default function OAuth() {
       name: user.displayName, 
       email: user.email,
       timestamp: serverTimestamp(),
+      avatarUrl: user.photoURL,
     });
     }
     navigate("/");
@@ -30,7 +31,7 @@ export default function OAuth() {
    }
   }
   return (
-    <button type="button" onClick={onGoogleClick} className="flex items-center justify-center w-full bg-red-800 text-white px-7 py-3 uppercase text-sm font-medium hover:bg-red-900 active:bg-red-950 shadow-md hover:shadow-lg active:shadow-lg transition duration-150 ease-in-out rounded"
+    <button type="button" onClick={onGoogleClick} className="flex items-center justify-center w-full bg-[#ec9464] text-white px-7 py-3 uppercase text-sm font-medium hover:bg-[#d57a4b] active:bg-[#c06c3a] shadow-md hover:shadow-lg active:shadow-lg transition duration-150 ease-in-out rounded-2xl"
     >
         <FcGoogle className="text-2xl  bg-white rounded-full mr-2"/>
         Continue with Google

@@ -17,7 +17,6 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function CreateListing(){
     const auth = getAuth();
     const navigate = useNavigate();
-   /* const [geolocationEnabled, setGeolocationEnabled] = useState(true);*/
     const [loading, setLoading]=useState(false);
     const [listing, setListing]=useState(null);
     const [formData, setFormData]= useState({
@@ -91,10 +90,6 @@ export default function CreateListing(){
               toast.error("maximum 6 images are allowed");
               return;
             }
-            /*let geolocation = {};
-    let location;*/
-   /* if (geolocationEnabled) {
-            }*/
             async function storeImage(image){
                 return new Promise((resolve, reject) => {
                     const storage = getStorage();
@@ -104,8 +99,6 @@ export default function CreateListing(){
                     uploadTask.on(
                         "state_changed",
                         (snapshot) => {
-                          // Observe state change events such as progress, pause, and resume
-                          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                           const progress =
                             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                           console.log("Upload is " + progress + "% done");
@@ -119,12 +112,9 @@ export default function CreateListing(){
                           }
                         },
                         (error) => {
-                          // Handle unsuccessful uploads
                           reject(error);
                         },
                         () => {
-                          // Handle successful uploads on complete
-                          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                             resolve(downloadURL);
                           });
@@ -142,12 +132,10 @@ export default function CreateListing(){
                 const formDataCopy = {
                   ...formData,
                   imgUrls,
-                  /*geolocation,*/
                   timestamp: serverTimestamp(),
                   userRef: auth.currentUser.uid,
                 };
                 delete formDataCopy.images;
-   /* !formDataCopy.offer && delete formDataCopy.discountedPrice;*/
                 delete formDataCopy.latitude;
                 delete formDataCopy.longitude;
                 const docRef = await addDoc(collection(db, "listings"), formDataCopy);

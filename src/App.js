@@ -13,6 +13,9 @@ import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
 import UserListing from './pages/UserListing';
+import ProfileLayout from "./components/ProfileLayout";
+import Chat from "./pages/Chat";
+import ChatList from "./pages/ChatList";
 
 
 function App() {
@@ -20,27 +23,30 @@ function App() {
     <>
       <Router>
         <Header />
+        <div className="bg-cream">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<PrivateRoute/>}>
-          <Route path="/profile" element={<Profile />} />
+          <Route element={<PrivateRoute />}>
+            <Route element={<ProfileLayout />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/create-listing" element={<CreateListing />} />
+              <Route path="/View-listing" element={<UserListing />} />
+              <Route path="/notifications" element={<div>Notifications Page</div>} />
+              <Route path="/chats" element={<ChatList />} />
+            </Route>
+            <Route path="/chat/:receiverId" element={<Chat />} />
           </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/category/:categoryName/:listingId" element={<Listing />} />
           <Route path="/offers" element={<Offers />} />
-          <Route path="create-listing" element={<PrivateRoute/>}>
-          <Route path="/create-listing" element={<CreateListing />} />
-          </Route>
-          <Route path="View-listing" element={<PrivateRoute/>}>
-          <Route path="/View-listing" element={<UserListing/>} />
-          </Route>
-         
+          
           <Route path="edit-listing" element={<PrivateRoute/>}>
-          <Route path="/edit-listing/:listingId" element={<EditListing />} />
+            <Route path="/edit-listing/:listingId" element={<EditListing />} />
           </Route>
         </Routes>
+        </div>
       </Router>
       <ToastContainer
         position="bottom-center"
@@ -52,10 +58,12 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
+        theme="light"
         />
     </>
   );
 }
 
 export default App;
+
+

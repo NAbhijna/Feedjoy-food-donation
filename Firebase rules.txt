@@ -1,30 +1,30 @@
-
-    // Firestore rules
-
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Listings
-    match /listings/{listing} {
+    match /listings/{listingId} {
     	allow read;
       allow create: if request.auth != null && request.resource.data.imgUrls.size() < 7;
     	allow delete: if resource.data.userRef == request.auth.uid;
       allow update: if resource.data.userRef == request.auth.uid;
     }
    
-    // Users
-    match /users/{user} {
+    match /users/{userId} {
     	allow read;
     	allow create;
-    	allow update: if request.auth.uid == user
+    	allow update: if request.auth.uid == userId;
+    }
+
+    match /chats/{chatId} {
+      allow list: if request.auth != null && request.auth.uid in resource.data.participants;
+      allow get, update, create: if request.auth != null && request.auth.uid in resource.data.participants;
+
+      match /messages/{messageId} {
+        allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow create: if request.auth != null && request.resource.data.senderId == request.auth.uid;
+      }
     }
   }
 }
-
-
-    // Storage rules
-
 
 rules_version = '2';
 service firebase.storage {
@@ -33,8 +33,20 @@ service firebase.storage {
       allow read;
       allow write: if
       request.auth != null &&
+      request.resource.size < 2 * 1024 * 1024 &&
+      request.resource.contentType.matches('image/.*');
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      allow write: if
+      request.auth != null &&
       request.resource.size < 2 * 1024 * 1024 && //2MB
-      request.resource.contentType.matches('image/.*')
+      request.resource.contentType.matches('image/.*');
     }
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PofileLayout from "../components/styles/PofileLayout";
-import { collection,  deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
+import { collection,  deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { toast } from "react-toastify";
 import ListingItem from "../components/ListingItem";
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { getAuth,  } from "firebase/auth";
 import { db } from './../firebase';
 
 const UserListing = () => {
-  const auth = getAuth();  // Make sure this is the only import for getAuth
+  const auth = getAuth(); 
   const navigate = useNavigate();
 
   const [listings, setListings] = useState(null);
@@ -51,30 +50,28 @@ const UserListing = () => {
   }
 
   return (
-    <PofileLayout>
-      <div>
-        <div className="max-w-6xl px-3 mt-6 mx-auto">
-          {!loading && listings.length > 0 && (
-            <>
-              <h2 className=" border border-black bg-slate-300 font-bold font-Lemon text-2xl text-center p-4 mb-6">
-                My Listings
-              </h2>
-              <ul className="sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                {listings.map((listing) => (
-                  <ListingItem
-                    key={listing.id}
-                    id={listing.id}
-                    listing={listing.data}
-                    onDelete={() => onDelete(listing.id)}
-                    onEdit={() => onEdit(listing.id)}
-                  />
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
+    <div>
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="font-bold text-2xl text-center p-4 mb-6 text-dark-olive">
+              My Listings
+            </h2>
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  id={listing.id}
+                  listing={listing.data}
+                  onDelete={() => onDelete(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
+                />
+              ))}
+            </ul>
+          </>
+        )}
       </div>
-    </PofileLayout>
+    </div>
   );
 }
 

@@ -1,8 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Lemon&family=Pacifico&family=Rubik+Doodle+Shadow&family=Salsa&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #fefae0;
+}
 
 @keyframes waveAnimation {
   0% {
@@ -35,8 +37,8 @@
 }
 .spinner {
   --size: 30px;
-  --first-block-clr: #005bba;
-  --second-block-clr: #fed500;
+  --first-block-clr: #606c38;
+  --second-block-clr: #dda15e;
   --clr: #111;
   width: 100px;
   height: 100px;
@@ -113,7 +115,6 @@
 }
 .cube-loader {
   position: relative;
-  /* u can choose any size */
   width: 75px;
   height: 75px;
   transform-style: preserve-3d;
@@ -131,10 +132,9 @@
   }
 }
 
-/* HTML: <div class="loader"></div> */
 .loader {
-  --c1: #673b14;
-  --c2: #f8b13b;
+  --c1: #283618;
+  --c2: #dda15e;
   width: 40px;
   height: 80px;
   border-top: 4px solid var(--c1);
@@ -202,3 +202,4 @@
     background-position: top, center;
   }
 }
+  
