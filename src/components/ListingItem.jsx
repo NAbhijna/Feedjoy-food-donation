@@ -26,7 +26,7 @@ export default function ListingItem({
             className="absolute top-2 left-2 bg-burnt-orange text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg"
             fromNow
           >
-            {listing.timestamp?.toDate()}
+            {listing.timestamp && listing.timestamp.toDate ? listing.timestamp.toDate() : new Date(listing.timestamp)}
           </Moment>
           {typeof distance === "number" && (
             <p className="absolute bottom-2 right-2 bg-burnt-orange text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg">
@@ -49,7 +49,9 @@ export default function ListingItem({
               {listing.quantity > 1 ? `${listing.quantity} kgs` : "1 kg"}
             </p>
             <p className="font-bold text-sm bg-golden-yellow text-dark-olive px-2 py-1 rounded-md">
-              Use by: <Moment format="MMM D, YYYY">{listing.expiry}</Moment>
+              Use by: <Moment format="MMM D, YYYY">
+                {listing.expiry && listing.expiry.toDate ? listing.expiry.toDate() : new Date(listing.expiry)}
+              </Moment>
             </p>
           </div>
         </div>

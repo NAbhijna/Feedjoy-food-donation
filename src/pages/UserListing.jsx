@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { collection,  deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { toast } from "react-toastify";
 import ListingItem from "../components/ListingItem";
 import { useNavigate } from 'react-router-dom';
-import { getAuth,  } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { db } from './../firebase';
 
 const UserListing = () => {

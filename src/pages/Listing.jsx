@@ -214,7 +214,9 @@ export default function Listing() {
                 </span>
               )}
               <span className="bg-burnt-orange text-white px-3 py-1 rounded-full">
-                Use By: <Moment format="MMM D, YYYY">{listing.expiry}</Moment>
+                Use By: <Moment format="MMM D, YYYY">
+                  {listing.expiry && listing.expiry.toDate ? listing.expiry.toDate() : new Date(listing.expiry)}
+                </Moment>
               </span>
             </div>
             

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 import {
@@ -8,13 +7,13 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import LocationPicker from "../components/LocationPicker";
+
 export default function CreateListing() {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -41,7 +40,6 @@ export default function CreateListing() {
     condition,
     animal,
     dietary,
-    address,
     description,
     images,
   } = formData;
@@ -105,6 +103,9 @@ export default function CreateListing() {
               case "running":
                 console.log("Upload is running");
                 break;
+              default:
+                // no-op
+                break;
             }
           },
           (error) => {
@@ -129,7 +130,7 @@ export default function CreateListing() {
     if (imgUrls === undefined) {
       return;
     }
-    
+
     const formDataCopy = {
       ...formData,
       imgUrls,
@@ -405,3 +406,4 @@ export default function CreateListing() {
     </main>
   );
 }
+

@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
-
 import {
   getStorage,
   ref,
@@ -10,13 +8,13 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LocationPicker from "../components/LocationPicker";
-export default function CreateListing() {
+
+export default function EditListing() {
   const auth = getAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -75,7 +73,7 @@ export default function CreateListing() {
       }
     }
     fetchListing();
-  }, [Navigate, params.listingId]);
+  }, [params.listingId, navigate]);
 
   function onChange(e) {
     let boolean = null;
@@ -375,3 +373,4 @@ export default function CreateListing() {
     </>
   );
 }
+

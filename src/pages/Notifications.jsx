@@ -32,13 +32,11 @@ export default function Notifications() {
     setLoading(true);
     let q;
     if (view === "incoming") {
-      console.log("[Notifications] Querying pickupRequests for donorId:", currentUser.uid);
       q = query(
         collection(db, "pickupRequests"),
         where("donorId", "==", currentUser.uid)
       );
     } else {
-      console.log("[Notifications] Querying pickupRequests for userId:", currentUser.uid);
       q = query(
         collection(db, "pickupRequests"),
         where("userId", "==", currentUser.uid)
@@ -46,11 +44,9 @@ export default function Notifications() {
     }
 
     const unsubscribe = onSnapshot(q, async (snapshot) => {
-      console.log("[Notifications] onSnapshot fired. Docs:", snapshot.size);
       const requestsData = await Promise.all(
         snapshot.docs.map(async (requestDoc) => {
           const request = requestDoc.data();
-          console.log("[Notifications] Request doc:", requestDoc.id, request);
 
           let userDoc = null;
           if (view === "incoming" && request.userId) {
@@ -76,7 +72,6 @@ export default function Notifications() {
         const pendingRequests = requestsData.filter(
           (req) => req.status === "pending"
         );
-        console.log("[Notifications] Filtered pendingRequests:", pendingRequests);
         setIncomingRequests(pendingRequests);
       } else {
         setSentRequests(requestsData);
@@ -296,4 +291,5 @@ export default function Notifications() {
     </div>
   );
 }
+    
 
