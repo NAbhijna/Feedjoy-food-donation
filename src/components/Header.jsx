@@ -131,9 +131,9 @@ export default function Header() {
           </button>
         </div>
         <div>
-          <ul className="flex space-x-8 items-center">
+          <ul className="flex space-x-4 sm:space-x-8 items-center">
             <li
-              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-xl sm:text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/") && "text-olive-green border-b-olive-green"
               }`}
               title="Home"
@@ -142,7 +142,7 @@ export default function Header() {
               <FaHome className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-xl sm:text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/offers") && "text-olive-green border-b-olive-green"
               }`}
               title="Donations"
@@ -151,11 +151,11 @@ export default function Header() {
               <FaHandHoldingHeart className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-xl sm:text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/chats") && "text-olive-green border-b-olive-green"
               }`}
               title="Chats"
-              onClick={() => navigate("/chats")}
+              onClick={() => (user ? navigate("/chats") : navigate("/sign-in"))}
             >
               <span className="relative">
                 <FaComments className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
@@ -163,11 +163,13 @@ export default function Header() {
               </span>
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-xl sm:text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/notifications") && "text-olive-green border-b-olive-green"
               }`}
               title="Notifications"
-              onClick={() => navigate("/notifications")}
+              onClick={() =>
+                user ? navigate("/notifications") : navigate("/sign-in")
+              }
             >
               <span className="relative">
                 <FaBell className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
@@ -182,15 +184,11 @@ export default function Header() {
               onClick={() => navigate("/profile")}
               title="Profile"
             >
-              {user ? (
-                <img
-                  src={user.photoURL || "/default-avatar.png"}
-                  alt="avatar"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <FaHome className="w-8 h-8 text-olive-green" />
-              )}
+              <img
+                src={user?.photoURL || "/placeholder.jpg"}
+                alt="avatar"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
+              />
             </li>
           </ul>
         </div>
