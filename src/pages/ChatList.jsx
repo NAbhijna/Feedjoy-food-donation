@@ -76,7 +76,7 @@ export default function ChatList() {
             <div
               key={chat.id}
               onClick={() => navigate(`/chat/${chat.receiverId}`)}
-              className="flex items-center p-4 bg-white rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+              className="flex items-center p-4 bg-golden-yellow/70 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow"
             >
               <img
                 src={chat.receiverInfo?.avatarUrl || "/default-avatar.png"}

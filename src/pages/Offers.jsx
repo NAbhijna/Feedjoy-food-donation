@@ -81,6 +81,9 @@ const Offers = () => {
 
     let filtered = listings
       .filter((listing) => {
+        // Exclude taken listings
+        if (listing.status === "taken") return false;
+
         // Food Type Filter
         if (isAnyFoodTypeSelected) {
           const isAnimal = listing.animal && filters.foodType.animal;

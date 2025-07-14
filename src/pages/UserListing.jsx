@@ -29,7 +29,10 @@ const UserListing = () => {
           data: doc.data(),
         });
       });
-      setListings(listings);
+      const availableListings = listings.filter(
+        (listing) => listing.data.status !== "taken"
+      );
+      setListings(availableListings);
       setLoading(false);
     }
 

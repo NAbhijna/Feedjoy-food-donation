@@ -135,6 +135,7 @@ export default function CreateListing() {
       imgUrls,
       timestamp: serverTimestamp(),
       userRef: auth.currentUser.uid,
+      status: "available",
     };
     delete formDataCopy.images;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);

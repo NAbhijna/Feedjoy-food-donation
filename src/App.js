@@ -16,6 +16,7 @@ import UserListing from './pages/UserListing';
 import ProfileLayout from "./components/ProfileLayout";
 import Chat from "./pages/Chat";
 import ChatList from "./pages/ChatList";
+import Notifications from "./pages/Notifications";
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/create-listing" element={<CreateListing />} />
               <Route path="/View-listing" element={<UserListing />} />
-              <Route path="/notifications" element={<div>Notifications Page</div>} />
+              <Route path="/notifications" element={<Notifications />} />
               <Route path="/chats" element={<ChatList />} />
             </Route>
             <Route path="/chat/:receiverId" element={<Chat />} />

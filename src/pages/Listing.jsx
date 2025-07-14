@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../firebase";
@@ -10,6 +10,8 @@ import { getAuth } from "firebase/auth";
 import { FaBackward } from "react-icons/fa";
 import Moment from "react-moment";
 import { haversineDistance } from "../utils/haversine";
+import PickupRequestModal from "../components/PickupRequestModal";
+import { toast } from "react-toastify";
 import {
   GoogleMap,
   useLoadScript,
@@ -58,6 +60,8 @@ export default function Listing() {
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [donor, setDonor] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -94,6 +98,47 @@ export default function Listing() {
     }
     fetchListing();
   }, [params.listingId]);
+
+  const handleRequestSubmit = async ({ reason, preferredTime }) => {
+    setRequestLoading(true);
+    if (!listing) {
+      console.error("[Listing] No listing loaded, cannot submit request.");
+      toast.error("Listing not loaded. Please try again.");
+      setRequestLoading(false);
+      return;
+    }
+    if (!listing.userRef) {
+      console.warn("[Listing] listing.userRef is missing!", listing);
+      toast.error("Donor information missing. Cannot send request.");
+      setRequestLoading(false);
+      return;
+    }
+    try {
+      console.log("[Listing] Creating pickup request with:", {
+        listingId: params.listingId,
+        donorId: listing.userRef,
+        userId: auth.currentUser?.uid,
+        reason,
+        preferredTime,
+      });
+      await addDoc(collection(db, "pickupRequests"), {
+        listingId: params.listingId,
+        donorId: listing.userRef,
+        userId: auth.currentUser.uid,
+        reason,
+        preferredTime,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+      toast.success("Pickup request sent successfully!");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("[Listing] Error sending pickup request:", error);
+      toast.error("Failed to send pickup request.");
+    } finally {
+      setRequestLoading(false);
+    }
+  };
 
   const goBack = () => {
     navigate(-1);
@@ -196,21 +241,38 @@ export default function Listing() {
           </div>
 
           {auth.currentUser?.uid &&
-            listing.userRef !== auth.currentUser.uid && (
+            listing.userRef !== auth.currentUser.uid && listing.status !== "taken" && (
               <div className="mt-6">
                 {listing.latitude && listing.longitude && (
                   <DonationMap listing={listing} />
                 )}
                 <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-full bg-olive-green px-7 py-3 text-white font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-dark-olive mt-6"
+                >
+                  Request Pickup
+                </button>
+                <button
                   onClick={() => navigate(`/chat/${listing.userRef}`)}
-                  className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange mt-6"
+                  className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange mt-4"
                 >
                   Chat with Donor
                 </button>
               </div>
             )}
+            {listing.status === "taken" && (
+              <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-2xl text-center font-semibold">
+                This donation has already been taken.
+              </div>
+            )}
         </div>
       </div>
+      <PickupRequestModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleRequestSubmit}
+        loading={requestLoading}
+      />
     </main>
   );
 }

@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  addDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Spinner from "../components/Spinner";
@@ -31,13 +32,13 @@ export default function Notifications() {
     setLoading(true);
     let q;
     if (view === "incoming") {
-      // Only query by donorId to match Firestore rules for list
+      console.log("[Notifications] Querying pickupRequests for donorId:", currentUser.uid);
       q = query(
         collection(db, "pickupRequests"),
         where("donorId", "==", currentUser.uid)
       );
     } else {
-      // Only query by userId to match Firestore rules for list
+      console.log("[Notifications] Querying pickupRequests for userId:", currentUser.uid);
       q = query(
         collection(db, "pickupRequests"),
         where("userId", "==", currentUser.uid)
@@ -45,21 +46,29 @@ export default function Notifications() {
     }
 
     const unsubscribe = onSnapshot(q, async (snapshot) => {
+      console.log("[Notifications] onSnapshot fired. Docs:", snapshot.size);
       const requestsData = await Promise.all(
         snapshot.docs.map(async (requestDoc) => {
           const request = requestDoc.data();
-          const userDoc =
-            view === "incoming"
-              ? await getDoc(doc(db, "users", request.userId))
-              : null;
-          const listingDoc = await getDoc(
-            doc(db, "listings", request.listingId)
-          );
+          console.log("[Notifications] Request doc:", requestDoc.id, request);
+
+          let userDoc = null;
+          if (view === "incoming" && request.userId) {
+            userDoc = await getDoc(doc(db, "users", request.userId));
+          } else if (view !== "incoming" && request.donorId) {
+            userDoc = await getDoc(doc(db, "users", request.donorId));
+          }
+
+          let listingDoc = null;
+          if (request.listingId) {
+            listingDoc = await getDoc(doc(db, "listings", request.listingId));
+          }
+
           return {
             id: requestDoc.id,
             ...request,
             requesterInfo: userDoc ? userDoc.data() : null,
-            listingInfo: listingDoc.data(),
+            listingInfo: listingDoc ? listingDoc.data() : null,
           };
         })
       );
@@ -67,6 +76,7 @@ export default function Notifications() {
         const pendingRequests = requestsData.filter(
           (req) => req.status === "pending"
         );
+        console.log("[Notifications] Filtered pendingRequests:", pendingRequests);
         setIncomingRequests(pendingRequests);
       } else {
         setSentRequests(requestsData);
@@ -87,6 +97,22 @@ export default function Notifications() {
         toast.success("Request accepted!");
       } else {
         toast.info("Request rejected.");
+      }
+
+      // Fetch the pickup request to get userId for notification
+      const requestSnap = await getDoc(requestRef);
+      if (requestSnap.exists()) {
+        const requestData = requestSnap.data();
+        // Create a notification for the requester
+        await addDoc(collection(db, "notifications"), {
+          toUserId: requestData.userId,
+          fromUserId: requestData.donorId,
+          requestId,
+          listingId,
+          type: "pickup-response",
+          status: newStatus,
+          timestamp: new Date(),
+        });
       }
     } catch (error) {
       console.error("Error updating request:", error);
@@ -233,6 +259,10 @@ export default function Notifications() {
                         Your request for{" "}
                         <span className="font-bold">
                           {req.listingInfo?.name || "a deleted listing"}
+                        </span>{" "}
+                        to{" "}
+                        <span className="font-bold">
+                          {req.requesterInfo?.name || "a user"}
                         </span>
                         .
                       </p>
