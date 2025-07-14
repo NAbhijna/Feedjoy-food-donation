@@ -126,7 +126,7 @@ export default function Profile() {
           />
         )}
       </div>
-      <div className="w-full">
+      <div className="w-full max-w-lg mx-auto">
         <form>
           <input
             type="text"
