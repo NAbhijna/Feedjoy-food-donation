@@ -1,6 +1,7 @@
 import React from "react";
 
 const Hero = () => {
+  const navigate = require("react-router-dom").useNavigate();
   return (
     <div
       className="bg-cover bg-center"
@@ -21,12 +22,12 @@ const Hero = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a
+            <button
               className="block w-full rounded-2xl bg-olive-green px-12 py-3 text-sm font-medium text-white shadow hover:bg-dark-olive focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
-              href="/profile"
+              onClick={() => navigate("/create-listing")}
             >
               Donate
-            </a>
+            </button>
 
             <a
               className="block w-full rounded-2xl px-12 py-3 text-sm font-medium text-golden-yellow shadow hover:text-white focus:outline-none focus:ring active:text-blue-500 sm:w-auto"

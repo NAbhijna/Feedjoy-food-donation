@@ -72,27 +72,37 @@ export default function ChatList() {
         </p>
       ) : (
         <div className="space-y-4">
-          {chats.map((chat) => (
-            <div
-              key={chat.id}
-              onClick={() => navigate(`/chat/${chat.receiverId}`)}
-              className="flex items-center p-4 bg-golden-yellow/70 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow"
-            >
-              <img
-                src={chat.receiverInfo?.avatarUrl || "/default-avatar.png"}
-                alt="avatar"
-                className="w-12 h-12 rounded-full object-cover mr-4"
-              />
-              <div className="flex-1">
-                <p className="font-bold text-dark-olive">
-                  {chat.receiverInfo?.name}
-                </p>
-                <p className="text-sm text-dark-olive/70 truncate">
-                  {chat.lastMessage}
-                </p>
+          {chats.map((chat) => {
+            const isUnread =
+              Array.isArray(chat.unread) &&
+              chat.unread.includes(currentUser.uid);
+            return (
+              <div
+                key={chat.id}
+                onClick={() => navigate(`/chat/${chat.receiverId}`)}
+                className={`flex items-center p-4 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow hover:bg-golden-yellow relative`}
+              >
+                <div className="relative">
+                  <img
+                    src={chat.receiverInfo?.avatarUrl || "/default-avatar.png"}
+                    alt="avatar"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  {isUnread && (
+                    <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-red-500 border-2 border-white"></span>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-dark-olive">
+                    {chat.receiverInfo?.name}
+                  </p>
+                  <p className="text-sm text-dark-olive/70 truncate">
+                    {chat.lastMessage}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

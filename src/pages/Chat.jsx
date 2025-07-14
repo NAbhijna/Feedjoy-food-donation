@@ -11,6 +11,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { FaBackward } from "react-icons/fa";
@@ -33,10 +34,21 @@ export default function Chat() {
     : null;
 
   useEffect(() => {
-    if (!currentUser) {
+    if (!currentUser || !chatId) {
       navigate("/sign-in");
       return;
     }
+
+    // Mark chat as read when component mounts
+    const markChatAsRead = async () => {
+      const chatDocRef = doc(db, "chats", chatId);
+      const chatDoc = await getDoc(chatDocRef);
+      if (chatDoc.exists() && chatDoc.data().unread?.includes(currentUser.uid)) {
+        const unread = chatDoc.data().unread.filter((id) => id !== currentUser.uid);
+        await updateDoc(chatDocRef, { unread });
+      }
+    };
+    markChatAsRead();
 
     const fetchReceiverInfo = async () => {
       const userDoc = await getDoc(doc(db, "users", receiverId));
@@ -55,6 +67,8 @@ export default function Chat() {
         ...doc.data(),
       }));
       setMessages(msgs);
+      // Mark as read again in case new messages arrive while on the page
+      markChatAsRead();
     });
 
     return () => unsubscribe();
@@ -75,6 +89,7 @@ export default function Chat() {
         participants: [currentUser.uid, receiverId],
         lastMessage: newMessage,
         updatedAt: serverTimestamp(),
+        unread: [receiverId], // Set receiver as unread
       },
       { merge: true }
     );

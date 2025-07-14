@@ -144,18 +144,57 @@ const Offers = () => {
   }, [listings, filters, sortBy, userLocation]);
 
   return (
-    <div className="w-full px-4 py-6">
+    <div className="w-full px-2 sm:px-4 py-6">
       <h1 className="text-3xl text-center font-bold mb-6 text-dark-olive">
         All Donations
       </h1>
 
       {/* Filters Section */}
-      <div className="p-4 bg-cream rounded-2xl shadow-md mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+      <div className="p-2 sm:p-3 bg-cream rounded-2xl shadow-md mb-8 grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 items-start">
         {/* Food Type */}
         <div>
           <p className="font-semibold text-dark-olive mb-2">Food Type</p>
-          <div className="flex flex-col gap-2">
-            {Object.keys(filters.foodType).map((type) => (
+          {/* Dropdown for veg/non-veg on small screens, checkboxes on md+ */}
+          <div className="block md:hidden">
+            <select
+              id="vegNonVeg"
+              name="vegNonVeg"
+              value={
+                filters.foodType.veg
+                  ? "veg"
+                  : filters.foodType.nonVeg
+                  ? "nonVeg"
+                  : ""
+              }
+              onChange={(e) => {
+                setFilters((prev) => ({
+                  ...prev,
+                  foodType: {
+                    veg: e.target.value === "veg",
+                    nonVeg: e.target.value === "nonVeg",
+                    animal: prev.foodType.animal,
+                  },
+                }));
+              }}
+              className="w-full p-2 border border-golden-yellow rounded-2xl bg-white text-dark-olive"
+            >
+              <option value="">All</option>
+              <option value="veg">Veg</option>
+              <option value="nonVeg">Non-Veg</option>
+            </select>
+            <label className="flex items-center gap-2 cursor-pointer mt-2">
+              <input
+                type="checkbox"
+                name="animal"
+                checked={filters.foodType.animal}
+                onChange={handleFilterChange}
+                className="h-5 w-5 rounded border-gray-300 text-olive-green focus:ring-olive-green"
+              />
+              <span className="text-dark-olive capitalize">Animal</span>
+            </label>
+          </div>
+          <div className="hidden md:flex flex-col gap-2">
+            {["veg", "nonVeg", "animal"].map((type) => (
               <label
                 key={type}
                 className="flex items-center gap-2 cursor-pointer"

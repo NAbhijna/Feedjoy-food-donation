@@ -121,7 +121,7 @@ export default function Listing() {
         reason,
         preferredTime,
       });
-      await addDoc(collection(db, "pickupRequests"), {
+      const pickupRequestRef = await addDoc(collection(db, "pickupRequests"), {
         listingId: params.listingId,
         donorId: listing.userRef,
         userId: auth.currentUser.uid,
@@ -130,6 +130,18 @@ export default function Listing() {
         status: "pending",
         createdAt: serverTimestamp(),
       });
+
+      // Create a notification for the donor
+      await addDoc(collection(db, "notifications"), {
+        toUserId: listing.userRef,
+        fromUserId: auth.currentUser.uid,
+        requestId: pickupRequestRef.id,
+        listingId: params.listingId,
+        type: "pickup-request",
+        timestamp: serverTimestamp(),
+        read: false,
+      });
+
       toast.success("Pickup request sent successfully!");
       setIsModalOpen(false);
     } catch (error) {

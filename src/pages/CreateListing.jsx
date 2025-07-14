@@ -199,38 +199,6 @@ export default function CreateListing() {
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-6">
-            <div>
-              <p className="text-lg font-semibold mb-1">Donate / Get</p>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  id="type"
-                  value="donate"
-                  onClick={onChange}
-                  className={`px-7 py-3 w-full border rounded-2xl ${
-                    type === "get"
-                      ? "bg-white text-black"
-                      : "bg-olive-green text-white"
-                  }`}
-                >
-                  Donate
-                </button>
-                <button
-                  type="button"
-                  id="type"
-                  value="get"
-                  onClick={onChange}
-                  className={`px-7 py-3 w-full border rounded-2xl ${
-                    type === "donate"
-                      ? "bg-white text-black"
-                      : "bg-olive-green text-white"
-                  }`}
-                >
-                  Get
-                </button>
-              </div>
-            </div>
-
             <div className="flex gap-6">
               <div className="flex-1">
                 <label
@@ -406,4 +374,4 @@ export default function CreateListing() {
     </main>
   );
 }
-
+           
