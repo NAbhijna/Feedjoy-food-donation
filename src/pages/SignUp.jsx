@@ -57,8 +57,15 @@ export default function SignUp() {
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold text-dark-olive">Sign Up</h1>
 
-    <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-md mx-auto">
-      <div className="w-full">
+    <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
+      <div className="md:w-1/2 lg:w-2/5 mb-12 md:mb-6">
+        <img
+          src="https://media.istockphoto.com/id/494347130/photo/friends-having-dinner.webp?b=1&s=170667a&w=0&k=20&c=w1YQQ0xFgIyzNHnp0_zuprqB_YtPmAlSub8f8BousLk="
+          alt="Sign Up"
+          className="w-full rounded-2xl"
+        />
+      </div>
+      <div className="w-full md:w-1/2 lg:w-2/5 lg:ml-20">
         <form onSubmit={onSubmit}>
          <input 
           type="text" 

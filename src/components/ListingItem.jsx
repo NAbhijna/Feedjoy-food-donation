@@ -5,7 +5,13 @@ import { MdLocationPin } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 
-export default function ListingItem({ listing, id, onEdit, onDelete }) {
+export default function ListingItem({
+  listing,
+  id,
+  onEdit,
+  onDelete,
+  distance,
+}) {
   return (
     <li className="relative bg-cream flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-2xl overflow-hidden transition-shadow duration-150 group">
       <Link className="w-full" to={`/category/${listing.type}/${id}`}>
@@ -22,13 +28,18 @@ export default function ListingItem({ listing, id, onEdit, onDelete }) {
           >
             {listing.timestamp?.toDate()}
           </Moment>
+          {typeof distance === "number" && (
+            <p className="absolute bottom-2 right-2 bg-burnt-orange text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg">
+              {distance.toFixed(1)} km away
+            </p>
+          )}
         </div>
         <div className="w-full p-4 space-y-2">
           <p className="font-semibold text-lg text-dark-olive truncate">
             {listing.name}
           </p>
           <div className="flex items-center space-x-1">
-            <MdLocationPin className="h-4 w-4 text-olive-green" />
+            <MdLocationPin className="h-4 w-4 md:h-5 md:w-5 text-olive-green" />
             <p className="font-semibold text-sm text-dark-olive/80 truncate">
               {listing.address}
             </p>
@@ -47,13 +58,13 @@ export default function ListingItem({ listing, id, onEdit, onDelete }) {
         <div className="absolute top-2 right-2 flex items-center gap-2">
           {onEdit && (
             <MdEdit
-              className="h-5 w-5 cursor-pointer text-dark-olive hover:text-burnt-orange"
+              className="h-5 w-5 md:h-6 md:w-6 cursor-pointer text-dark-olive hover:text-burnt-orange"
               onClick={() => onEdit(id)}
             />
           )}
           {onDelete && (
             <FaTrash
-              className="h-4 w-4 cursor-pointer text-red-600 hover:text-red-800"
+              className="h-4 w-4 md:h-5 md:w-5 cursor-pointer text-red-600 hover:text-red-800"
               onClick={() => onDelete(id)}
             />
           )}

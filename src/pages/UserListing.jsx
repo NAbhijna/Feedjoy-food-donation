@@ -57,15 +57,19 @@ const UserListing = () => {
             <h2 className="font-bold text-2xl text-center p-4 mb-6 text-dark-olive">
               My Listings
             </h2>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-6">
               {listings.map((listing) => (
-                <ListingItem
+                <div
                   key={listing.id}
-                  id={listing.id}
-                  listing={listing.data}
-                  onDelete={() => onDelete(listing.id)}
-                  onEdit={() => onEdit(listing.id)}
-                />
+                  className="[&_svg[class*=text-dark-olive]]:bg-white [&_svg[class*=text-dark-olive]]:rounded-full [&_svg[class*=text-dark-olive]]:p-1 [&_svg[class*=text-red-600]]:bg-white [&_svg[class*=text-red-600]]:rounded-full [&_svg[class*=text-red-600]]:p-1"
+                >
+                  <ListingItem
+                    id={listing.id}
+                    listing={listing.data}
+                    onDelete={() => onDelete(listing.id)}
+                    onEdit={() => onEdit(listing.id)}
+                  />
+                </div>
               ))}
             </ul>
           </>

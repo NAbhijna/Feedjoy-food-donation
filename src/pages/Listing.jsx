@@ -8,6 +8,47 @@ import { FaShare } from "react-icons/fa";
 import { MdLocationPin } from "react-icons/md";
 import { getAuth } from "firebase/auth";
 import { FaBackward } from "react-icons/fa";
+import Moment from "react-moment";
+import { haversineDistance } from "../utils/haversine";
+import {
+  GoogleMap,
+  useLoadScript,
+  Marker,
+} from "@react-google-maps/api";
+
+const libraries = ["places"];
+const mapContainerStyle = {
+  width: "100%",
+  height: "200px",
+  borderRadius: "1rem",
+  marginTop: "1.5rem",
+};
+
+function DonationMap({ listing }) {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading Maps...</div>;
+
+  const center = {
+    lat: listing.latitude,
+    lng: listing.longitude,
+  };
+
+  return (
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      zoom={15}
+      center={center}
+    >
+      <Marker position={center} />
+    </GoogleMap>
+  );
+}
+
 export default function Listing() {
   const auth = getAuth();
   const params = useParams();
@@ -16,6 +57,23 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [donor, setDonor] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting user location", error);
+        }
+      );
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchListing() {
@@ -76,8 +134,9 @@ export default function Listing() {
           <img
             src={listing.imgUrls[0]}
             alt={listing.name}
-            className="w-full h-full object-cover rounded-2xl shadow-lg"
+            className="w-full h-auto object-cover rounded-2xl shadow-lg"
           />
+          <p className="text-gray-700 mt-4">{listing.description}</p>
         </div>
         <div className="md:w-1/2 flex flex-col">
           <div className="p-4 bg-cream rounded-2xl shadow-md flex-grow">
@@ -104,14 +163,29 @@ export default function Listing() {
               <span className="bg-golden-yellow text-dark-olive px-3 py-1 rounded-full">
                 For: {listing.animal ? "Animal" : "Human"}
               </span>
+              {listing.dietary && (
+                <span className="bg-golden-yellow text-dark-olive px-3 py-1 rounded-full capitalize">
+                  {listing.dietary}
+                </span>
+              )}
               <span className="bg-burnt-orange text-white px-3 py-1 rounded-full">
-                Use By: {listing.expiry}
+                Use By: <Moment format="MMM D, YYYY">{listing.expiry}</Moment>
               </span>
             </div>
-            <p className="text-gray-700 mb-4">{listing.description}</p>
+            
             <div className="flex items-center mb-2">
               <MdLocationPin className="h-6 w-6 text-olive-green mr-2" />
               <p className="font-semibold text-dark-olive">{listing.address}</p>
+              {userLocation && listing.latitude && listing.longitude && (
+                <span className="ml-2 text-sm text-dark-olive/80">
+                  (
+                  {haversineDistance(userLocation, {
+                    lat: listing.latitude,
+                    lng: listing.longitude,
+                  }).toFixed(1)}{" "}
+                  km away)
+                </span>
+              )}
             </div>
             <div className="flex items-center">
               <FaWeightScale className="h-6 w-6 text-olive-green mr-2" />
@@ -124,9 +198,12 @@ export default function Listing() {
           {auth.currentUser?.uid &&
             listing.userRef !== auth.currentUser.uid && (
               <div className="mt-6">
+                {listing.latitude && listing.longitude && (
+                  <DonationMap listing={listing} />
+                )}
                 <button
                   onClick={() => navigate(`/chat/${listing.userRef}`)}
-                  className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange"
+                  className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange mt-6"
                 >
                   Chat with Donor
                 </button>

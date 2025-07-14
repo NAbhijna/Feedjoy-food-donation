@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can manage their own profile.
+    // Any authenticated user can read public user info (name, avatar).
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth.uid == userId;
+    }
+
+    // Rules for donation listings
+    match /listings/{listingId} {
+      // Any authenticated user can view listings.
+      allow read: if request.auth != null;
+      
+      // Users can only create listings for themselves.
+      allow create: if request.auth.uid == request.resource.data.userRef;
+
+      // Only the original donor can update or delete their listing.
+      allow update, delete: if request.auth.uid == resource.data.userRef;
+    }
+
+    // Rules for pickup requests
+    match /pickupRequests/{requestId} {
+      // Only the donor or the requester can read a request.
+      allow read: if request.auth != null && (request.auth.uid == resource.data.donorId || request.auth.uid == resource.data.requesterId);
+      
+      // A user can only create a request for themselves.
+      allow create: if request.auth.uid == request.resource.data.requesterId;
+      
+      // Only the donor can update a request (to accept/reject it).
+      allow update: if request.auth.uid == resource.data.donorId;
+    }
+
+    // Rules for the chat system
+    match /chats/{chatId} {
+      // Only participants of the chat can read or write to it.
+      allow read, write: if request.auth.uid in resource.data.participants;
+
+      // Rules for messages within a chat
+      match /messages/{messageId} {
+        // Only chat participants can read messages.
+        allow read: if request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        
+        // A user must be a participant and the sender to create a message.
+        allow create: if request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants
+                      && request.auth.uid == request.resource.data.senderId;
+      }
+    }
+  }
+}
