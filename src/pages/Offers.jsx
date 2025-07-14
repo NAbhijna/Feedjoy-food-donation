@@ -4,6 +4,8 @@ import { db } from "../firebase";
 import ListingItem from "../components/ListingItem";
 import Spinner from "../components/Spinner";
 import { haversineDistance } from "../utils/haversine";
+import { useAuthStatus } from "../hooks/useAuthStatus";
+import { useNavigate } from "react-router-dom";
 
 const initialFilters = {
   foodType: {
@@ -16,11 +18,19 @@ const initialFilters = {
 };
 
 const Offers = () => {
+  const { loggedIn, checkingStatus } = useAuthStatus();
+  const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(initialFilters);
   const [sortBy, setSortBy] = useState("newest"); // 'newest', 'nearest'
   const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    if (!checkingStatus && !loggedIn) {
+      navigate("/sign-in");
+    }
+  }, [loggedIn, checkingStatus, navigate]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -143,9 +153,13 @@ const Offers = () => {
     return filtered; // Already sorted by newest from Firestore query
   }, [listings, filters, sortBy, userLocation]);
 
+  if (checkingStatus || !loggedIn) {
+    return <Spinner />;
+  }
+
   return (
-    <div className="w-full px-2 sm:px-4 py-6">
-      <h1 className="text-3xl text-center font-bold mb-6 text-dark-olive">
+    <div className="w-full max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 py-4 sm:py-6">
+      <h1 className="text-2xl sm:text-3xl text-center font-bold mb-4 sm:mb-6 text-dark-olive">
         All Donations
       </h1>
 

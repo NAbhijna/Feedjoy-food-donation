@@ -177,11 +177,11 @@ export default function EditListing() {
   return (
     <>
       <main className="w-full px-4">
-        <h1 className="text-3xl text-center mt-6 font-bold text-dark-olive">
+        <h1 className="text-2xl sm:text-3xl text-center mt-4 sm:mt-6 font-bold text-dark-olive">
           Edit Listing
         </h1>
         <form onSubmit={onSubmit}>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">
             Donate / Get
           </p>
           <div className="flex">
@@ -212,7 +212,7 @@ export default function EditListing() {
               Get
             </button>
           </div>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">Name</p>
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">Name</p>
           <input
             type="text"
             id="name"
@@ -251,7 +251,7 @@ export default function EditListing() {
               />
             </div>
           </div>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">Dietary</p>
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">Dietary</p>
           <div className="flex">
             <button
               type="button"
@@ -280,7 +280,7 @@ export default function EditListing() {
               Non-Veg
             </button>
           </div>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">Condition</p>
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">Condition</p>
           <div className="flex">
             <button
               type="button"
@@ -305,7 +305,7 @@ export default function EditListing() {
               Cooked
             </button>
           </div>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">
             Animal food?
           </p>
           <div className="flex">
@@ -332,7 +332,7 @@ export default function EditListing() {
               No
             </button>
           </div>
-          <p className="text-lg mt-6 font-semibold text-dark-olive">Address</p>
+          <p className="text-lg mt-4 sm:mt-6 font-semibold text-dark-olive">Address</p>
           <LocationPicker
             onLocationSelect={handleLocationSelect}
             initialData={{ address, latitude, longitude }}

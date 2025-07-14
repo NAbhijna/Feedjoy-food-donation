@@ -4,11 +4,11 @@ const Hero = () => {
   const navigate = require("react-router-dom").useNavigate();
   return (
     <div
-      className="bg-cover bg-center"
-      style={{ backgroundImage: "url('/hero-image.jpg')" }}
+      className="relative bg-cover bg-center"
+      style={{ backgroundImage: "url('/hero.jpg')" }}
     >
-      <section className="bg-black bg-opacity-50">
-        <div className="px-4 py-32 flex flex-col items-center text-center">
+      <section className="bg-black bg-opacity-50 backdrop-blur-sm">
+        <div className="max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 py-20 sm:py-32 flex flex-col items-center text-center">
           <h1 className="text-4xl font-extrabold sm:text-6xl text-white">
             Welcome to FeedJoy
             <strong className="block font-extrabold text-golden-yellow">
@@ -30,7 +30,7 @@ const Hero = () => {
             </button>
 
             <a
-              className="block w-full rounded-2xl px-12 py-3 text-sm font-medium text-golden-yellow shadow hover:text-white focus:outline-none focus:ring active:text-blue-500 sm:w-auto"
+              className="block w-full rounded-2xl bg-cream px-12 py-3 text-sm font-medium text-burnt-orange shadow hover:bg-golden-yellow hover:text-white focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
               href="#explore"
             >
               Learn More
@@ -38,6 +38,7 @@ const Hero = () => {
           </div>
         </div>
       </section>
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream to-transparent" />
     </div>
   );
 };

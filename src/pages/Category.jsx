@@ -49,8 +49,8 @@ export default function Category() {
   }, [params.categoryName]);
 
   return (
-    <div className="max-w-6xl mx-auto px-3 py-6">
-      <h1 className="text-3xl text-center font-bold mb-6 text-dark-olive">
+    <div className="max-w-6xl mx-auto px-3 py-4 sm:py-6">
+      <h1 className="text-2xl sm:text-3xl text-center font-bold mb-4 sm:mb-6 text-dark-olive">
         {params.categoryName === "donate"
           ? "Items Available for Donation"
           : "Items Being Requested"}

@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { FaHome, FaBell, FaComments, FaGift } from "react-icons/fa";
+import { FaHome, FaBell, FaComments, FaHandHoldingHeart } from "react-icons/fa";
 import { db } from "../firebase";
 import { collection, query, where, onSnapshot, getDocs, writeBatch } from "firebase/firestore";
 
@@ -119,17 +119,21 @@ export default function Header() {
   );
 
   return (
-    <div className="bg-cream border-b border-golden-yellow shadow-sm sticky top-0 z-40">
-      <header className="flex justify-between items-center px-4 py-2">
+    <div className="bg-cream shadow-sm sticky top-0 z-40">
+      <header className="flex justify-between items-center max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 py-2">
         <div>
-          <button onClick={() => navigate("/")}>
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2"
+          >
+            <img src="/logo.png" alt="FeedJoy Logo" className="h-8 w-8" />
             <h1 className="text-dark-olive font-bold text-2xl">FEEDJOY</h1>
           </button>
         </div>
         <div>
-          <ul className="flex space-x-6 items-center">
+          <ul className="flex space-x-8 items-center">
             <li
-              className={`relative cursor-pointer py-3 text-xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/") && "text-olive-green border-b-olive-green"
               }`}
               title="Home"
@@ -138,16 +142,16 @@ export default function Header() {
               <FaHome className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/offers") && "text-olive-green border-b-olive-green"
               }`}
               title="Donations"
               onClick={() => navigate("/offers")}
             >
-              <FaGift className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
+              <FaHandHoldingHeart className="text-olive-green hover:text-golden-yellow active:text-dark-olive transition-colors duration-150" />
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/chats") && "text-olive-green border-b-olive-green"
               }`}
               title="Chats"
@@ -159,7 +163,7 @@ export default function Header() {
               </span>
             </li>
             <li
-              className={`relative cursor-pointer py-3 text-xl border-b-[3px] border-b-transparent ${
+              className={`relative cursor-pointer py-3 text-2xl border-b-[3px] border-b-transparent ${
                 pathMatchRoute("/notifications") && "text-olive-green border-b-olive-green"
               }`}
               title="Notifications"
@@ -182,10 +186,10 @@ export default function Header() {
                 <img
                   src={user.photoURL || "/default-avatar.png"}
                   alt="avatar"
-                  className="w-6 h-6 rounded-full object-cover"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
               ) : (
-                <FaHome className="w-6 h-6 text-olive-green" />
+                <FaHome className="w-8 h-8 text-olive-green" />
               )}
             </li>
           </ul>

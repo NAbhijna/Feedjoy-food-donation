@@ -140,10 +140,10 @@ export default function ProfileLayout() {
   );
 
   return (
-    <div className="flex w-full p-4 gap-6">
+    <div className="max-w-screen-2xl mx-auto flex w-full min-h-[calc(100vh-68px)] px-6 sm:px-10 lg:px-12 py-4 gap-6">
       {/* Hamburger for mobile */}
       <button
-        className="md:hidden fixed top-4 right-4 z-50 bg-olive-green text-white p-2 rounded-full shadow-lg"
+        className="md:hidden fixed top-20 right-4 z-50 bg-olive-green text-white p-2 rounded-full shadow-lg"
         onClick={() => setSidebarOpen(true)}
         aria-label="Open navigation"
       >
@@ -151,14 +151,14 @@ export default function ProfileLayout() {
       </button>
 
       {/* Sidebar for desktop */}
-      <aside className="hidden md:block w-1/4">
+      <aside className="hidden md:block w-64 flex-shrink-0 bg-cream border-2 border-golden-yellow rounded-2xl p-4 sticky top-[84px] h-[calc(100vh-116px)] overflow-y-auto">
         {SidebarNav}
       </aside>
 
       {/* Sidebar drawer for mobile */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-40 flex">
-          <div className="w-64 bg-cream h-full p-4 shadow-lg relative animate-slide-in-left">
+          <div className="w-64 bg-cream h-full p-6 shadow-lg relative animate-slide-in-left border-r-2 border-golden-yellow">
             <button
               className="absolute top-4 right-4 text-dark-olive"
               onClick={() => setSidebarOpen(false)}
@@ -176,7 +176,7 @@ export default function ProfileLayout() {
         </div>
       )}
 
-      <main className="w-full md:w-3/4">
+      <main className="flex-grow">
         <Outlet />
       </main>
     </div>

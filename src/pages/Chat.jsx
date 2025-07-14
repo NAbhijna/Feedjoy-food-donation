@@ -109,7 +109,7 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-68px)] max-w-4xl mx-auto bg-cream">
+    <div className="flex flex-col h-[calc(100vh-68px)] max-w-screen-2xl mx-auto bg-cream">
       <header className="flex items-center p-4 border-b border-golden-yellow sticky top-0 bg-cream z-10">
         <button onClick={() => navigate(-1)} className="p-2 mr-4">
           <FaBackward className="text-dark-olive" />

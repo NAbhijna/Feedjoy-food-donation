@@ -37,34 +37,34 @@ body {
   height: auto;
   z-index: -1;
 }
-.spinner {
-  --size: 30px;
-  --first-block-clr: #606c38;
-  --second-block-clr: #dda15e;
-  --clr: #111;
-  width: 100px;
-  height: 100px;
+@keyframes waveAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.cube-loader {
   position: relative;
+  width: 75px;
+  height: 75px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg);
+  animation: animate 4s linear infinite;
 }
 
-.spinner::after,
-.spinner::before {
-  box-sizing: border-box;
-  position: absolute;
-  content: "";
-  width: var(--size);
-  height: var(--size);
-  top: 50%;
-  animation: up 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
-  left: 50%;
-  background: var(--first-block-clr);
-}
+@keyframes animate {
+  0% {
+    transform: rotateX(-30deg) rotateY(0);
+  }
 
-.spinner::after {
-  background: var(--second-block-clr);
-  top: calc(50% - var(--size));
-  left: calc(50% - var(--size));
-  animation: down 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+  100% {
+    transform: rotateX(-30deg) rotateY(360deg);
+  }
 }
 
 @keyframes down {

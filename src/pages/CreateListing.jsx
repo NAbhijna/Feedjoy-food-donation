@@ -151,10 +151,20 @@ export default function CreateListing() {
 
   return (
     <main className="w-full p-4">
-      <h1 className="text-3xl text-center my-6 font-bold text-dark-olive">
-        Create a Listing
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-dark-olive">
+          Create a Listing
+        </h1>
+        <button
+          type="submit"
+          form="create-listing-form"
+          className="px-7 py-3 bg-olive-green text-white font-medium text-sm uppercase rounded-2xl hover:bg-dark-olive"
+        >
+          Create Listing
+        </button>
+      </div>
       <form
+        id="create-listing-form"
         onSubmit={onSubmit}
         className="bg-cream p-6 rounded-2xl shadow-lg"
       >
@@ -361,17 +371,7 @@ export default function CreateListing() {
             </div>
           </div>
         </div>
-
-        <div className="mt-6">
-          <button
-            type="submit"
-            className="w-full px-7 py-3 bg-olive-green text-white font-medium text-sm uppercase rounded-2xl hover:bg-dark-olive"
-          >
-            Create Listing
-          </button>
-        </div>
       </form>
     </main>
   );
 }
-           

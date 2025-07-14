@@ -152,7 +152,7 @@ export default function Notifications() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl text-center my-6 font-bold text-dark-olive">
+      <h1 className="text-2xl sm:text-3xl text-center my-4 sm:my-6 font-bold text-dark-olive">
         Notifications
       </h1>
 

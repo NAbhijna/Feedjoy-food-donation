@@ -62,8 +62,8 @@ export default function ChatList() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl text-center my-6 font-bold text-dark-olive">
+    <div className="max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 py-4">
+      <h1 className="text-2xl sm:text-3xl text-center my-4 sm:my-6 font-bold text-dark-olive">
         My Chats
       </h1>
       {chats.length === 0 ? (
@@ -80,7 +80,7 @@ export default function ChatList() {
               <div
                 key={chat.id}
                 onClick={() => navigate(`/chat/${chat.receiverId}`)}
-                className={`flex items-center p-4 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow hover:bg-golden-yellow relative`}
+                className={`flex items-center p-4 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition-shadow hover:bg-golden-yellow relative bg-white`}
               >
                 <div className="relative">
                   <img
