@@ -106,7 +106,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-4">
+    <div className="w-full p-4">
       <h1 className="text-3xl text-center mt-6 font-bold text-dark-olive">
         My Profile
       </h1>
@@ -165,4 +165,4 @@ export default function Profile() {
     </div>
   );
 }
-  
+

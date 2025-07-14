@@ -18,7 +18,7 @@ export default function ProfileLayout() {
   const inactiveLinkClass = "hover:bg-golden-yellow/50 text-dark-olive";
 
   return (
-    <div className="flex max-w-6xl mx-auto p-4 gap-6">
+    <div className="flex w-full p-4 gap-6">
       <aside className="w-1/4">
         <nav className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-2">

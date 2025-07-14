@@ -49,7 +49,7 @@ export default function ListingItem({
               {listing.quantity > 1 ? `${listing.quantity} kgs` : "1 kg"}
             </p>
             <p className="font-bold text-sm bg-golden-yellow text-dark-olive px-2 py-1 rounded-md">
-              Use by: {listing.expiry}
+              Use by: <Moment format="MMM D, YYYY">{listing.expiry}</Moment>
             </p>
           </div>
         </div>

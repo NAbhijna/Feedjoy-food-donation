@@ -41,7 +41,7 @@ const LocationPicker = ({ onLocationSelect, initialData }) => {
   const onPlaceChanged = () => {
     if (autocompleteRef.current !== null) {
       const place = autocompleteRef.current.getPlace();
-      if (place.geometry) {
+      if (place && place.geometry) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
         const newPosition = { lat, lng };
