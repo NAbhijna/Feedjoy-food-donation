@@ -57,7 +57,7 @@ const UserListing = () => {
             <h2 className="font-bold text-2xl text-center p-4 mb-6 text-dark-olive">
               My Listings
             </h2>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-6">
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {listings.map((listing) => (
                 <div
                   key={listing.id}
