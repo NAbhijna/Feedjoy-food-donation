@@ -106,32 +106,29 @@ export default function Chat() {
     if (newMessage.trim() === "") return;
 
     const chatDocRef = doc(db, "chats", chatId);
-    // Ensure chat doc exists before sending message
-    const chatDocSnap = await getDoc(chatDocRef);
+    // Always create chat doc if missing, and set correct fields
+    let chatDocSnap = await getDoc(chatDocRef);
     if (!chatDocSnap.exists()) {
+      await setDoc(chatDocRef, {
+        participants: [currentUser.uid, receiverId],
+        lastMessage: newMessage,
+        updatedAt: serverTimestamp(),
+        unread: [receiverId],
+      });
+    } else {
       await setDoc(
         chatDocRef,
         {
           participants: [currentUser.uid, receiverId],
-          lastMessage: "",
+          lastMessage: newMessage,
           updatedAt: serverTimestamp(),
-          unread: [],
+          unread: [receiverId],
         },
         { merge: true }
       );
     }
 
-    await setDoc(
-      chatDocRef,
-      {
-        participants: [currentUser.uid, receiverId],
-        lastMessage: newMessage,
-        updatedAt: serverTimestamp(),
-        unread: [receiverId], // Set receiver as unread
-      },
-      { merge: true }
-    );
-
+    // Now add the message
     const messagesRef = collection(db, "chats", chatId, "messages");
     await addDoc(messagesRef, {
       text: newMessage,
@@ -209,3 +206,4 @@ export default function Chat() {
     </div>
   );
 }
+    

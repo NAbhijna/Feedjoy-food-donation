@@ -1,7 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
-  const navigate = require("react-router-dom").useNavigate();
+  const navigate = useNavigate();
   return (
     <div
       className="relative bg-cover bg-center"
@@ -23,14 +24,14 @@ const Hero = () => {
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <button
-              className="block w-full rounded-2xl bg-olive-green px-12 py-3 text-sm font-medium text-white shadow hover:bg-dark-olive focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
+              className="block w-full rounded-2xl bg-olive-green px-8 sm:px-12 py-3 text-sm font-medium text-white shadow hover:bg-dark-olive focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
               onClick={() => navigate("/create-listing")}
             >
               Donate
             </button>
 
             <a
-              className="block w-full rounded-2xl bg-cream px-12 py-3 text-sm font-medium text-burnt-orange shadow hover:bg-golden-yellow hover:text-white focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
+              className="block w-full rounded-2xl bg-cream px-8 sm:px-12 py-3 text-sm font-medium text-burnt-orange shadow hover:bg-golden-yellow hover:text-white focus:outline-none focus:ring active:bg-dark-olive sm:w-auto"
               href="#explore"
             >
               Learn More
