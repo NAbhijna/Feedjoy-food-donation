@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import {
   collection,
   query,
@@ -13,11 +13,9 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import { FaBackward } from "react-icons/fa";
 
 export default function Chat() {
-  const auth = getAuth();
   const navigate = useNavigate();
   const { receiverId } = useParams();
   const [messages, setMessages] = useState([]);
@@ -33,18 +31,20 @@ export default function Chat() {
       : `${receiverId}_${currentUser.uid}`
     : null;
 
-  // Ensure chat document exists before anything else
+  // Ensure chat document exists before anything else and THEN set up listeners
   useEffect(() => {
+    let unsubscribe = null;
     if (!currentUser || !chatId) {
       navigate("/sign-in");
       return;
     }
 
-    const ensureChatDoc = async () => {
+    let isMounted = true;
+
+    const setupChatAndListeners = async () => {
       const chatDocRef = doc(db, "chats", chatId);
       const chatDocSnap = await getDoc(chatDocRef);
       if (!chatDocSnap.exists()) {
-        // Create the chat doc with participants and timestamps
         await setDoc(chatDocRef, {
           participants: [currentUser.uid, receiverId],
           lastMessage: "",
@@ -52,50 +52,45 @@ export default function Chat() {
           unread: [],
         });
       }
-    };
-    ensureChatDoc();
-  }, [currentUser, chatId, receiverId, navigate]);
 
-  useEffect(() => {
-    if (!currentUser || !chatId) {
-      navigate("/sign-in");
-      return;
-    }
+      // Fetch receiver info
+      const userDoc = await getDoc(doc(db, "users", receiverId));
+      if (userDoc.exists() && isMounted) {
+        setReceiverInfo(userDoc.data());
+      }
 
-    // Mark chat as read when component mounts
-    const markChatAsRead = async () => {
-      const chatDocRef = doc(db, "chats", chatId);
+      // Mark chat as read
       const chatDoc = await getDoc(chatDocRef);
       if (chatDoc.exists() && chatDoc.data().unread?.includes(currentUser.uid)) {
         const unread = chatDoc.data().unread.filter((id) => id !== currentUser.uid);
         await updateDoc(chatDocRef, { unread });
       }
+
+      // Now set up the message listener
+      const messagesRef = collection(db, "chats", chatId, "messages");
+      const q = query(messagesRef, orderBy("timestamp", "asc"));
+      unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const msgs = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        if (isMounted) setMessages(msgs);
+        // Mark as read again in case new messages arrive while on the page
+        if (msgs.length > 0) {
+          updateDoc(chatDocRef, {
+            unread: (chatDoc.data().unread || []).filter((id) => id !== currentUser.uid),
+          });
+        }
+      });
     };
-    markChatAsRead();
 
-    const fetchReceiverInfo = async () => {
-      const userDoc = await getDoc(doc(db, "users", receiverId));
-      if (userDoc.exists()) {
-        setReceiverInfo(userDoc.data());
-      }
+    setupChatAndListeners();
+
+    return () => {
+      isMounted = false;
+      if (unsubscribe) unsubscribe();
     };
-    fetchReceiverInfo();
-
-    const messagesRef = collection(db, "chats", chatId, "messages");
-    const q = query(messagesRef, orderBy("timestamp", "asc"));
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const msgs = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setMessages(msgs);
-      // Mark as read again in case new messages arrive while on the page
-      markChatAsRead();
-    });
-
-    return () => unsubscribe();
-  }, [currentUser, navigate, receiverId, chatId]);
+  }, [currentUser, chatId, receiverId, navigate]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

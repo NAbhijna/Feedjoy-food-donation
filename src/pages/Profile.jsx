@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import {
   getStorage,
   ref,
@@ -12,7 +12,6 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 export default function Profile() {
-  const auth = getAuth();
   const [changeDetail, setChangeDetail] = useState(false);
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,

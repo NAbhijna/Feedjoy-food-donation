@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import {
   collection,
   query,
@@ -13,14 +13,12 @@ import {
   getDocs,
   orderBy,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 import Moment from "react-moment";
 import { useNavigate } from "react-router-dom";
 
 export default function Notifications() {
-  const auth = getAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -7,15 +7,13 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import { useNavigate, useParams } from "react-router-dom";
 import LocationPicker from "../components/LocationPicker";
 
 export default function EditListing() {
-  const auth = getAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState(null);
@@ -373,4 +371,3 @@ export default function EditListing() {
     </>
   );
 }
-

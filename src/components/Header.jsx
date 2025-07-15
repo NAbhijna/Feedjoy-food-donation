@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+import { auth, db } from "../firebase"; // Import auth from firebase.js
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { FaHome, FaBell, FaComments, FaHandHoldingHeart } from "react-icons/fa";
-import { db } from "../firebase";
 import { collection, query, where, onSnapshot, getDocs, writeBatch } from "firebase/firestore";
 
 export default function Header() {
@@ -12,7 +11,6 @@ export default function Header() {
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const auth = getAuth();
 
   // Listen for auth state
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { doc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import Spinner from "../components/Spinner";
 import { FaWeightScale } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
@@ -53,7 +53,6 @@ function DonationMap({ listing }) {
 }
 
 export default function Listing() {
-  const auth = getAuth();
   const params = useParams();
   const navigate = useNavigate();
   const [listing, setListing] = useState(null);

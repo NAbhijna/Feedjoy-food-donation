@@ -3,13 +3,11 @@ import { collection, deleteDoc, doc, getDocs, orderBy, query, where } from "fire
 import { toast } from "react-toastify";
 import ListingItem from "../components/ListingItem";
 import { useNavigate } from 'react-router-dom';
-import { getAuth } from "firebase/auth";
-import { db } from './../firebase';
+import { auth, db } from './../firebase'; // Import auth from firebase.js
 import { useAuthStatus } from "../hooks/useAuthStatus";
 import Spinner from "../components/Spinner";
 
 const UserListing = () => {
-  const auth = getAuth(); 
   const navigate = useNavigate();
   const { loggedIn, checkingStatus } = useAuthStatus();
 

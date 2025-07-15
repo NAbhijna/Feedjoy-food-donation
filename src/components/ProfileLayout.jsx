@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaPlus, FaList, FaBell, FaSignOutAlt, FaComments, FaBars, FaTimes } from "react-icons/fa";
-import { getAuth } from "firebase/auth";
-import { db } from "../firebase";
+import { auth, db } from "../firebase"; // Import auth from firebase.js
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import ChatList from "../pages/ChatList"; // Import ChatList for sidebar
 
 export default function ProfileLayout() {
-  const auth = getAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);

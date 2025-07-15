@@ -3,11 +3,10 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // Import auth from firebase.js
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
@@ -29,7 +28,6 @@ export default function SignUp() {
   async function onSubmit(e) {
     e.preventDefault();
     try {
-      const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -48,7 +46,16 @@ export default function SignUp() {
       //toast.success("Sign Up was successful");
       navigate("/");
     } catch (error) {
-      toast.error("Something went wrong with the registration");
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("Email address is already in use.");
+      } else if (error.code === "auth/invalid-email") {
+        toast.error("Please enter a valid email address.");
+      } else if (error.code === "auth/weak-password") {
+        toast.error("Password should be at least 6 characters.");
+      } else {
+        toast.error("Something went wrong with the registration.");
+        console.error(error);
+      }
     }
   }
   return (

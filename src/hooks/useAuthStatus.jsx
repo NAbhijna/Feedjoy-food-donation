@@ -1,15 +1,14 @@
 import React from 'react'
 
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase"; // Import auth from firebase.js
 
 export function useAuthStatus() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth();
-    console.log(auth);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedIn(true);
@@ -19,3 +18,4 @@ export function useAuthStatus() {
   }, []);
   return { loggedIn, checkingStatus };
 }
+
