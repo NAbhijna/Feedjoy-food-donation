@@ -69,7 +69,7 @@ export default function ListingItem({
       </div>
       {onDelete && (
         <FaTrash
-          className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-600"
+          className="absolute bottom-2 right-2 h-5 w-5 sm:h-[14px] sm:w-[14px] cursor-pointer text-red-600"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(listing.id);
@@ -78,7 +78,7 @@ export default function ListingItem({
       )}
       {onEdit && (
         <MdEdit
-          className="absolute bottom-2 right-7 h-4 cursor-pointer text-dark-olive"
+          className="absolute bottom-2 right-7 h-6 w-6 sm:h-4 sm:w-4 cursor-pointer text-dark-olive"
           onClick={(e) => {
             e.stopPropagation();
             onEdit(listing.id);

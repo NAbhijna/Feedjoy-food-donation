@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaPlus, FaList, FaBell, FaSignOutAlt, FaComments, FaBars, FaTimes } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
+import ChatList from "../pages/ChatList"; // Import ChatList for sidebar
 
 export default function ProfileLayout() {
   const auth = getAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [hasUnreadChats, setHasUnreadChats] = useState(false);
@@ -139,6 +141,9 @@ export default function ProfileLayout() {
     </nav>
   );
 
+  // Detect if we are on a single chat page
+  const isChatPage = /^\/chat\/[^/]+$/.test(location.pathname);
+
   return (
     <div className="max-w-screen-2xl mx-auto flex w-full min-h-[calc(100vh-68px)] px-6 sm:px-10 lg:px-12 py-4 gap-6">
       {/* Hamburger for mobile */}
@@ -152,7 +157,15 @@ export default function ProfileLayout() {
 
       {/* Sidebar for desktop */}
       <aside className="hidden md:block w-64 flex-shrink-0 bg-cream border-2 border-golden-yellow rounded-2xl p-4 sticky top-[84px] h-[calc(100vh-116px)] overflow-y-auto">
-        {SidebarNav}
+        {isChatPage ? (
+          // Show chat list in sidebar when inside a chat
+          <div>
+            <h2 className="text-xl font-bold text-dark-olive mb-4">My Chats</h2>
+            <ChatList sidebarMode />
+          </div>
+        ) : (
+          SidebarNav
+        )}
       </aside>
 
       {/* Sidebar drawer for mobile */}
@@ -166,7 +179,14 @@ export default function ProfileLayout() {
             >
               <FaTimes size={24} />
             </button>
-            {SidebarNav}
+            {isChatPage ? (
+              <div>
+                <h2 className="text-xl font-bold text-dark-olive mb-4">My Chats</h2>
+                <ChatList sidebarMode onChatClick={() => setSidebarOpen(false)} />
+              </div>
+            ) : (
+              SidebarNav
+            )}
           </div>
           <div
             className="flex-1"

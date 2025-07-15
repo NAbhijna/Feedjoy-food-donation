@@ -150,15 +150,15 @@ export default function CreateListing() {
   }
 
   return (
-    <main className="w-full p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-dark-olive">
+    <main className="w-full p-2 sm:p-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
+        <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-dark-olive text-center sm:text-left">
           Create a Listing
         </h1>
         <button
           type="submit"
           form="create-listing-form"
-          className="px-7 py-3 bg-green-500 text-white font-medium text-sm uppercase rounded-2xl hover:bg-green-600"
+          className="px-5 py-2 sm:px-7 sm:py-3 bg-green-500 text-white font-medium text-xs sm:text-sm uppercase rounded-2xl hover:bg-green-600"
         >
           Create Listing
         </button>
@@ -166,7 +166,7 @@ export default function CreateListing() {
       <form
         id="create-listing-form"
         onSubmit={onSubmit}
-        className="bg-cream p-6 rounded-2xl shadow-lg"
+        className="bg-cream p-4 sm:p-6 rounded-2xl shadow-lg"
       >
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <div>

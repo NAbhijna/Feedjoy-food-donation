@@ -8,7 +8,7 @@ const Hero = () => {
       style={{ backgroundImage: "url('/hero.jpg')" }}
     >
       <section className="bg-black bg-opacity-50 backdrop-blur-sm">
-        <div className="max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 py-20 sm:py-32 flex flex-col items-center text-center">
+        <div className="px-4 py-20 sm:py-32 flex flex-col items-center text-center">
           <h1 className="text-4xl font-extrabold sm:text-6xl text-white">
             Welcome to FeedJoy
             <strong className="block font-extrabold text-golden-yellow">

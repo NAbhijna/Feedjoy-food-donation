@@ -64,17 +64,17 @@ const UserListing = () => {
 
   return (
     <div>
-      <div className="max-w-6xl px-3 mt-4 sm:mt-6 mx-auto">
-        {!loading && listings.length > 0 && (
+      <div className="max-w-6xl px-2 sm:px-3 mt-2 sm:mt-4 mx-auto">
+        {!loading && listings && listings.length > 0 ? (
           <>
-            <h2 className="font-bold text-xl sm:text-2xl text-center p-2 sm:p-4 mb-4 sm:mb-6 text-dark-olive">
+            <h2 className="font-bold text-lg sm:text-xl md:text-2xl text-center p-2 sm:p-4 mb-3 sm:mb-6 text-dark-olive">
               My Listings
             </h2>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+            <ul className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
               {listings.map((listing) => (
                 <div
                   key={listing.id}
-                  className="[&_svg[class*=text-dark-olive]]:bg-white [&_svg[class*=text-dark-olive]]:rounded-full [&_svg[class*=text-dark-olive]]:p-1 [&_svg[class*=text-red-600]]:bg-white [&_svg[class*=text-red-600]]:rounded-full [&_svg[class*=text-red-600]]:p-1"
+                  className="w-full [&_svg[class*=text-dark-olive]]:bg-white [&_svg[class*=text-dark-olive]]:rounded-full [&_svg[class*=text-dark-olive]]:p-1 [&_svg[class*=text-red-600]]:bg-white [&_svg[class*=text-red-600]]:rounded-full [&_svg[class*=text-red-600]]:p-1"
                 >
                   <ListingItem
                     id={listing.id}
@@ -86,6 +86,11 @@ const UserListing = () => {
               ))}
             </ul>
           </>
+        ) : (
+          <div className="py-10 text-center">
+            <h2 className="font-bold text-lg sm:text-xl text-dark-olive mb-2">My Listings</h2>
+            <p className="text-dark-olive/80">You have not created any listings yet.</p>
+          </div>
         )}
       </div>
     </div>
