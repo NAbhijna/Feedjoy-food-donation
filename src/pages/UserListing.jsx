@@ -5,36 +5,45 @@ import ListingItem from "../components/ListingItem";
 import { useNavigate } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { db } from './../firebase';
+import { useAuthStatus } from "../hooks/useAuthStatus";
+import Spinner from "../components/Spinner";
 
 const UserListing = () => {
   const auth = getAuth(); 
   const navigate = useNavigate();
+  const { loggedIn, checkingStatus } = useAuthStatus();
 
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchUserListings() {
-      const listingRef = collection(db, "listings");
-      const q = query(
-        listingRef,
-        where("userRef", "==", auth.currentUser.uid),
-        orderBy("timestamp", "desc")
-      );
-      const querySnap = await getDocs(q);
-      let listings = [];
-      querySnap.forEach((doc) => {
-        return listings.push({
-          id: doc.id,
-          data: doc.data(),
-        });
-      });
-      setListings(listings);
-      setLoading(false);
+    if (!checkingStatus && !loggedIn) {
+      navigate("/sign-in");
+      return;
     }
+    if (loggedIn) {
+      async function fetchUserListings() {
+        const listingRef = collection(db, "listings");
+        const q = query(
+          listingRef,
+          where("userRef", "==", auth.currentUser.uid),
+          orderBy("timestamp", "desc")
+        );
+        const querySnap = await getDocs(q);
+        let listings = [];
+        querySnap.forEach((doc) => {
+          return listings.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        setListings(listings);
+        setLoading(false);
+      }
 
-    fetchUserListings();
-  }, [auth.currentUser.uid]);
+      fetchUserListings();
+    }
+  }, [auth.currentUser, checkingStatus, loggedIn, navigate]);
 
   async function onDelete(listingID) {
     if (window.confirm("Are you sure you want to delete?")) {
@@ -49,9 +58,13 @@ const UserListing = () => {
     navigate(`/edit-listing/${listingID}`);
   }
 
+  if (checkingStatus || loading) {
+    return <Spinner />;
+  }
+
   return (
     <div>
-      <div className="max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-12 mt-4 sm:mt-6">
+      <div className="max-w-6xl px-3 mt-4 sm:mt-6 mx-auto">
         {!loading && listings.length > 0 && (
           <>
             <h2 className="font-bold text-xl sm:text-2xl text-center p-2 sm:p-4 mb-4 sm:mb-6 text-dark-olive">

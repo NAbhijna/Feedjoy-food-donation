@@ -142,7 +142,7 @@ export default function CreateListing() {
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false);
     toast.success("Listing created");
-    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+    navigate(`/listing/${docRef.id}`);
   }
 
   if (loading) {
@@ -158,7 +158,7 @@ export default function CreateListing() {
         <button
           type="submit"
           form="create-listing-form"
-          className="px-7 py-3 bg-olive-green text-white font-medium text-sm uppercase rounded-2xl hover:bg-dark-olive"
+          className="px-7 py-3 bg-green-500 text-white font-medium text-sm uppercase rounded-2xl hover:bg-green-600"
         >
           Create Listing
         </button>

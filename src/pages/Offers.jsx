@@ -27,12 +27,6 @@ const Offers = () => {
   const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (!checkingStatus && !loggedIn) {
-      navigate("/sign-in");
-    }
-  }, [loggedIn, checkingStatus, navigate]);
-
-  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -150,10 +144,18 @@ const Offers = () => {
       });
     }
 
+    if (sortBy === "expiry") {
+      return filtered.sort((a, b) => {
+        const dateA = a.expiry?.toDate ? a.expiry.toDate() : new Date(a.expiry);
+        const dateB = b.expiry?.toDate ? b.expiry.toDate() : new Date(b.expiry);
+        return dateA - dateB;
+      });
+    }
+
     return filtered; // Already sorted by newest from Firestore query
   }, [listings, filters, sortBy, userLocation]);
 
-  if (checkingStatus || !loggedIn) {
+  if (checkingStatus) {
     return <Spinner />;
   }
 
@@ -274,10 +276,10 @@ const Offers = () => {
         {/* Sort & Reset */}
         <div>
           <p className="font-semibold text-dark-olive mb-2">Sort By</p>
-          <div className="flex gap-2 bg-white p-1 rounded-2xl border border-golden-yellow">
+          <div className="flex flex-wrap gap-2 bg-white p-1 rounded-2xl border border-golden-yellow">
             <button
               onClick={() => setSortBy("newest")}
-              className={`w-full p-2 rounded-xl ${
+              className={`flex-grow p-2 rounded-xl ${
                 sortBy === "newest"
                   ? "bg-olive-green text-white"
                   : "text-dark-olive"
@@ -288,13 +290,23 @@ const Offers = () => {
             <button
               onClick={() => setSortBy("nearest")}
               disabled={!userLocation}
-              className={`w-full p-2 rounded-xl ${
+              className={`flex-grow p-2 rounded-xl ${
                 sortBy === "nearest"
                   ? "bg-olive-green text-white"
                   : "text-dark-olive"
               } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Nearest
+            </button>
+            <button
+              onClick={() => setSortBy("expiry")}
+              className={`flex-grow p-2 rounded-xl ${
+                sortBy === "expiry"
+                  ? "bg-olive-green text-white"
+                  : "text-dark-olive"
+              }`}
+            >
+              Expiry
             </button>
           </div>
           <button

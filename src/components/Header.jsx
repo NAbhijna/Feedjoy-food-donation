@@ -25,14 +25,14 @@ export default function Header() {
   // Listen for unseen notifications
   useEffect(() => {
     if (!user) return;
-    // Restructure query to avoid needing a composite index
+    // This query is now more efficient with a composite index
     const q = query(
       collection(db, "notifications"),
-      where("toUserId", "==", user.uid)
+      where("toUserId", "==", user.uid),
+      where("read", "==", false)
     );
     const unsub = onSnapshot(q, (snapshot) => {
-      const hasUnread = snapshot.docs.some((doc) => !doc.data().read);
-      setHasUnseenNotifications(hasUnread);
+      setHasUnseenNotifications(!snapshot.empty);
     });
     return () => unsub();
   }, [user]);

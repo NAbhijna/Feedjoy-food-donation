@@ -12,6 +12,7 @@ import Moment from "react-moment";
 import { haversineDistance } from "../utils/haversine";
 import PickupRequestModal from "../components/PickupRequestModal";
 import { toast } from "react-toastify";
+import { useAuthStatus } from "../hooks/useAuthStatus";
 import {
   GoogleMap,
   useLoadScript,
@@ -62,6 +63,13 @@ export default function Listing() {
   const [userLocation, setUserLocation] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
+  const { loggedIn, checkingStatus } = useAuthStatus();
+
+  useEffect(() => {
+    if (!checkingStatus && !loggedIn) {
+      navigate("/sign-in");
+    }
+  }, [loggedIn, checkingStatus, navigate]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -156,7 +164,7 @@ export default function Listing() {
     navigate(-1);
   };
 
-  if (loading) {
+  if (loading || checkingStatus) {
     return <Spinner />;
   }
 
@@ -213,6 +221,26 @@ export default function Listing() {
                 </div>
               </div>
             )}
+
+            {auth.currentUser?.uid &&
+              listing.userRef !== auth.currentUser.uid &&
+              listing.status !== "taken" && (
+                <div className="flex flex-col gap-4 my-6">
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-full bg-olive-green px-7 py-3 text-white font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-dark-olive"
+                  >
+                    Request Pickup
+                  </button>
+                  <button
+                    onClick={() => navigate(`/chat/${listing.userRef}`)}
+                    className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange"
+                  >
+                    Chat with Donor
+                  </button>
+                </div>
+              )}
+
             <div className="flex flex-wrap gap-4 mb-4 text-sm">
               <span className="bg-golden-yellow text-dark-olive px-3 py-1 rounded-full">
                 Type: {listing.type}
@@ -252,33 +280,16 @@ export default function Listing() {
                 {listing.quantity > 1 ? `${listing.quantity} kgs` : "1 kg"}
               </p>
             </div>
+            {listing.latitude && listing.longitude && (
+              <DonationMap listing={listing} />
+            )}
           </div>
 
-          {auth.currentUser?.uid &&
-            listing.userRef !== auth.currentUser.uid && listing.status !== "taken" && (
-              <div className="mt-6">
-                {listing.latitude && listing.longitude && (
-                  <DonationMap listing={listing} />
-                )}
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="w-full bg-olive-green px-7 py-3 text-white font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-dark-olive mt-6"
-                >
-                  Request Pickup
-                </button>
-                <button
-                  onClick={() => navigate(`/chat/${listing.userRef}`)}
-                  className="w-full bg-golden-yellow px-7 py-3 text-dark-olive font-medium text-sm uppercase rounded-2xl shadow-md hover:bg-burnt-orange mt-4"
-                >
-                  Chat with Donor
-                </button>
-              </div>
-            )}
-            {listing.status === "taken" && (
-              <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-2xl text-center font-semibold">
-                This donation has already been taken.
-              </div>
-            )}
+          {listing.status === "taken" && (
+            <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-2xl text-center font-semibold">
+              This donation has already been taken.
+            </div>
+          )}
         </div>
       </div>
       <PickupRequestModal
