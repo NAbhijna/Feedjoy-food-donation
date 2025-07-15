@@ -33,6 +33,29 @@ export default function Chat() {
       : `${receiverId}_${currentUser.uid}`
     : null;
 
+  // Ensure chat document exists before anything else
+  useEffect(() => {
+    if (!currentUser || !chatId) {
+      navigate("/sign-in");
+      return;
+    }
+
+    const ensureChatDoc = async () => {
+      const chatDocRef = doc(db, "chats", chatId);
+      const chatDocSnap = await getDoc(chatDocRef);
+      if (!chatDocSnap.exists()) {
+        // Create the chat doc with participants and timestamps
+        await setDoc(chatDocRef, {
+          participants: [currentUser.uid, receiverId],
+          lastMessage: "",
+          updatedAt: serverTimestamp(),
+          unread: [],
+        });
+      }
+    };
+    ensureChatDoc();
+  }, [currentUser, chatId, receiverId, navigate]);
+
   useEffect(() => {
     if (!currentUser || !chatId) {
       navigate("/sign-in");
@@ -83,6 +106,21 @@ export default function Chat() {
     if (newMessage.trim() === "") return;
 
     const chatDocRef = doc(db, "chats", chatId);
+    // Ensure chat doc exists before sending message
+    const chatDocSnap = await getDoc(chatDocRef);
+    if (!chatDocSnap.exists()) {
+      await setDoc(
+        chatDocRef,
+        {
+          participants: [currentUser.uid, receiverId],
+          lastMessage: "",
+          updatedAt: serverTimestamp(),
+          unread: [],
+        },
+        { merge: true }
+      );
+    }
+
     await setDoc(
       chatDocRef,
       {
